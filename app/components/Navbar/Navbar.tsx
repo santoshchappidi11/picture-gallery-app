@@ -1,5 +1,3 @@
-// import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaArrowRightLong } from "react-icons/fa6";
 import React from "react";
 
