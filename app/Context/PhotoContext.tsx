@@ -11,6 +11,13 @@ type Photo = {
     full: string;
   };
   alt_description: string;
+  user: {
+    username: string;
+    name: string;
+    profile_image: {
+      large: string;
+    };
+  };
 };
 
 type PhotoContextType = {
@@ -27,7 +34,7 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
   const [photos, setPhotos] = useState<Photo[]>([]);
 
   const fetchPhotos = async (query: string) => {
-    console.log(query, "context query");
+    // console.log(query, "context query");
 
     try {
       const response = await api.get("/search/photos", {

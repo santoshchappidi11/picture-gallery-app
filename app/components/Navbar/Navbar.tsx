@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { fetchPhotos } = usePhotoContext();
 
-  console.log(searchQuery, "query here");
+  // console.log(searchQuery, "query here");
 
   const handleSearch = () => {
     fetchPhotos(searchQuery);
@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button
-          className="flex justify-between items-center w-auto h-10 pl-2 bg-black text-white hover:bg-gray-800 rounded-r-md outline-none"
+          className="flex justify-between items-center w-auto h-10 pl-2 bg-none bg-black text-white hover:bg-gray-800 rounded-r-md outline-none"
           onClick={handleSearch}
           type="submit"
         >
