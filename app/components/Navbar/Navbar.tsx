@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
         <input
           type="text"
           placeholder="search category..."
-          className="w-4/5 h-10 mx-2 outline-none"
+          className="w-4/5 h-10 mx-2 outline-none placeholder:text-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
