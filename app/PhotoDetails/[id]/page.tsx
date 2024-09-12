@@ -74,12 +74,12 @@ const SinglePhotoDetails = () => {
           <p className="font-semibold">Loading...</p>
         </div>
       ) : (
-        <div className="h-auto w-full border border-black flex justify-between items-start">
-          <div className="h-screen w-3/5 flex justify-center items-center relative overflow-hidden">
+        <div className="h-auto w-full lg:flex lg:justify-between lg:items-start">
+          <div className="h-screen lg:w-3/5 flex justify-center items-center relative overflow-hidden">
             <Image
               src={photoDetails ? photoDetails?.urls?.regular : ""}
-              //   width={500}
-              //   height={500}
+              // width={1000}
+              // height={1000}
               alt={
                 photoDetails
                   ? photoDetails?.alt_description
@@ -90,8 +90,8 @@ const SinglePhotoDetails = () => {
             />
           </div>
 
-          <div className="my-5 mx-5 w-2/6">
-            <div>
+          <div className="my-5 mx-5 lg:w-2/6">
+            <div className="border-b border-b-gray-300  flex flex-col items-center justify-center">
               {" "}
               <div className="flex justify-start items-center">
                 <Image
@@ -104,12 +104,15 @@ const SinglePhotoDetails = () => {
                   className="rounded-3xl"
                 />
                 <h2 className="font-semibold mx-2">
+                  <p className="font-normal text-sm">
+                    @{photoDetails?.user?.username}
+                  </p>
                   {photoDetails?.user?.name}
                 </h2>
               </div>
-              <div className="mt-2">
+              <div className="mt-2 flex justify-center items-center flex-col">
                 {" "}
-                <p className="my-1">{photoDetails?.alt_description}</p>
+                <p className="text-center">{photoDetails?.alt_description}</p>
                 <p>
                   By{" "}
                   <a
@@ -119,7 +122,7 @@ const SinglePhotoDetails = () => {
                     @{photoDetails?.user.name}
                   </a>
                 </p>
-                <p className="flex justify-start items-center my-1">
+                <p className="flex justify-start items-center my-2">
                   <FaLocationDot className="mr-1" />{" "}
                   {photoDetails?.user?.location
                     ? photoDetails?.user?.location
@@ -127,22 +130,25 @@ const SinglePhotoDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="w-full h-auto my-10 ">
-              <div className="w-3/5 flex justify-between items-center my-3">
+            <div className="w-full h-auto mt-5 flex justify-center items-center flex-col">
+              <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
+                Stats
+              </h2>
+              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
                 <p>Views: </p>
                 <span className="flex">
                   {photoDetails?.views?.toLocaleString()}
                   {"  "} <TbEyeSearch className="text-2xl mx-1" />
                 </span>{" "}
               </div>
-              <div className="w-3/5 flex justify-between items-center my-3">
+              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
                 <p>Downloads:</p>
                 <span className="flex">
                   {photoDetails?.downloads.toLocaleString()}{" "}
                   <PiDownloadSimple className="text-2xl mx-1" />
                 </span>{" "}
               </div>
-              <div className="w-3/5 flex justify-between items-center my-3">
+              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
                 <p>Likes:</p>
                 <span className="flex">
                   {photoDetails?.likes.toLocaleString()}{" "}
@@ -151,17 +157,19 @@ const SinglePhotoDetails = () => {
               </div>
             </div>
 
-            <div className="w-full my-5 ">
-              <h3>Additional Information</h3>
-              <div className="w-3/5 flex justify-between items-center my-3">
-                <p>Taken at:</p>
+            <div className="w-full mt-5 flex justify-center items-center flex-col">
+              <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
+                Additional Information
+              </h2>
+              <div className="sm w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
+                <p className="">Taken at:</p>
                 <span>
                   {photoDetails?.taken_at
                     ? photoDetails?.taken_at
                     : "Not available"}
                 </span>
               </div>
-              <div className="w-3/5 flex justify-between items-center my-3">
+              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
                 <p>Camera:</p>
                 <span>
                   {photoDetails?.camera
@@ -169,9 +177,11 @@ const SinglePhotoDetails = () => {
                     : "Not available"}
                 </span>
               </div>
-              <div className="w-auto my-12">
-                <h2>Tags:</h2>
-                <p className=" w-auto">
+              <div className="w-auto mt-10 mb-10 flex justify-center items-center flex-col">
+                <h2 className="px-2 bg-gray-100 text-gray-600 rounded-sm uppercase font-medium">
+                  Tags:
+                </h2>
+                <p className=" w-auto text-center">
                   {photoDetails?.tags
                     ? photoDetails?.tags.map((tag) => tag?.title).join(", ")
                     : "Not available"}

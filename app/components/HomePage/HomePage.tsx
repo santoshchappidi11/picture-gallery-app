@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
           <p className="font-semibold">Loading...</p>
         </div>
       ) : (
-        <div className="h-auto w-full 2xl:mt-10 2xl:mb-5 2xl:px-5">
+        <div className="h-auto w-full my-10 px-5">
           <div className="h-auto w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 place-items-center ">
             {photos?.map((item) => (
               <Link

@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="h-20 w-full border-b border-b-gray-300 flex justify-center items-center sticky top-0 bg-transparent backdrop-blur-md z-10">
+    <div className="h-20 w-full flex justify-center items-center sticky top-0 bg-transparent backdrop-blur-md z-10">
       <div className="h-auto w-72 bg-white lg:w-96 sm:w-80 border border-black flex justify-between items-center rounded-md">
         <input
           type="text"
