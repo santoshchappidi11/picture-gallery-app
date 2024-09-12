@@ -75,7 +75,7 @@ const SinglePhotoDetails = () => {
         </div>
       ) : (
         <div className="h-auto w-full lg:flex lg:justify-between lg:items-start">
-          <div className="h-screen lg:w-3/5 flex justify-center items-center relative overflow-hidden">
+          <div className="h-screen lg:w-3/5 lg:ml-5 flex justify-center items-center relative overflow-hidden">
             <Image
               src={photoDetails ? photoDetails?.urls?.regular : ""}
               // width={1000}
@@ -193,7 +193,7 @@ const SinglePhotoDetails = () => {
               <a
                 href={photoDetails?.links?.html}
                 target="blank"
-                className="w-full p-3 cursor-pointer flex justify-center items-center"
+                className="w-full p-3 cursor-pointer flex justify-center items-center bg-black text-white hover:bg-gray-800"
               >
                 View on unsplash <FaUnsplash className="mx-2 text-xl" />
               </a>
