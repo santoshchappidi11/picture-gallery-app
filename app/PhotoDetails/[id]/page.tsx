@@ -84,8 +84,8 @@ const SinglePhotoDetails = () => {
           <p className="font-semibold">Loading...</p>
         </div>
       ) : (
-        <div className="h-auto w-full border border-black relative">
-          <div className="h-auto w-full lg:flex lg:justify-between lg:items-start border border-black">
+        <div className="h-auto w-full relative">
+          <div className="h-auto w-full lg:flex lg:justify-between lg:items-start">
             <div className="h-screen lg:w-3/5 lg:ml-5 flex justify-center items-center relative overflow-hidden">
               <Image
                 onClick={handleShowImage}
@@ -228,13 +228,13 @@ const SinglePhotoDetails = () => {
                   }
                   layout="fill"
                 />
-                <div className="z-50 -top-[330px] left-[420px] relative">
-                  <IoCloseSharp
-                    className="cursor-pointer"
-                    size={50}
-                    onClick={closeShowingImage}
-                  />
-                </div>
+              </div>
+              <div className="z-50 -top-[310px] left-[80px] relative">
+                <IoCloseSharp
+                  className="cursor-pointer"
+                  size={50}
+                  onClick={closeShowingImage}
+                />
               </div>
             </div>
           )}
