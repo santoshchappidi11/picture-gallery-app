@@ -3,12 +3,12 @@
 import api from "@/app/ApiConfig";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { FaLocationDot, FaUnsplash } from "react-icons/fa6";
-import { IoCloseSharp } from "react-icons/io5";
+import React, { useEffect, useRef, useState } from "react";
+import { FaDownload, FaLocationDot, FaUnsplash } from "react-icons/fa6";
 import { PiDownloadSimple } from "react-icons/pi";
 import { TbEyeSearch } from "react-icons/tb";
 import { TiHeart } from "react-icons/ti";
+// import { IoCloseSharp } from "react-icons/io5";
 
 type tag = {
   title: string;
@@ -45,9 +45,38 @@ const SinglePhotoDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [photoDetails, setPhotoDetails] = useState<Photo>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isShowOnlyImage, setIsShowOnlyImage] = useState<boolean>(false);
+  const imageRef = useRef();
 
   console.log(photoDetails, "photo single");
+
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    // Get the click coordinates
+    const x = e.clientX;
+    const y = e.clientY;
+
+    // Calculate the zoom level based on the click coordinates
+    const zoomLevel = 2; // adjust the zoom level to your liking
+    const zoomX = x / (500 / zoomLevel);
+    const zoomY = y / (500 / zoomLevel);
+
+    // Get the current transform style of the image
+    const imageContainer = document.querySelector(".image-container");
+    if (imageContainer) {
+      const img = imageContainer.querySelector("img");
+      if (img) {
+        const currentTransform = img.style.transform;
+
+        // Toggle the zoom level
+        if (currentTransform && currentTransform.includes("scale")) {
+          // Zoom out
+          img.style.transform = "";
+        } else {
+          // Zoom in
+          img.style.transform = `translate(${zoomX}px, ${zoomY}px) scale(${zoomLevel})`;
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     try {
@@ -69,12 +98,20 @@ const SinglePhotoDetails = () => {
     }
   }, [id]);
 
-  const handleShowImage = () => {
-    setIsShowOnlyImage(true);
-  };
-
-  const closeShowingImage = () => {
-    setIsShowOnlyImage(false);
+  const handleDownloadImage = () => {
+    if (imageRef.current) {
+      const imageSrc = imageRef.current.src;
+      fetch(imageSrc)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${photoDetails?.alt_description}.jpg`; // set the download filename
+          link.click();
+          URL.revokeObjectURL(url); // revoke the object URL to avoid memory leaks
+        });
+    }
   };
 
   return (
@@ -84,21 +121,22 @@ const SinglePhotoDetails = () => {
           <p className="font-semibold">Loading...</p>
         </div>
       ) : (
-        <div className="h-auto w-full relative">
-          <div className="h-auto w-full lg:flex lg:justify-between lg:items-start">
-            <div className="h-screen lg:w-3/5 lg:ml-5 flex justify-center items-center relative overflow-hidden">
+        <div className="h-auto w-full relative border border-red-600 flex justify-center items-center">
+          <div className="h-auto w-full lg:flex lg:justify-between lg:items-center">
+            <div className="h-screen lg:w-3/5 lg:ml-5 image-container relative overflow-hidden">
               <Image
-                onClick={handleShowImage}
-                src={photoDetails ? photoDetails?.urls?.regular : ""}
+                ref={imageRef}
                 // width={1000}
                 // height={1000}
+                src={photoDetails ? photoDetails?.urls?.regular : ""}
                 alt={
                   photoDetails
                     ? photoDetails?.alt_description
                     : "some random photo"
                 }
                 layout="fill"
-                className="object-contain transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
+                className="object-contain transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer rounded-sm"
+                onClick={handleImageClick}
               />
             </div>
 
@@ -207,37 +245,20 @@ const SinglePhotoDetails = () => {
                 <a
                   href={photoDetails?.links?.html}
                   target="blank"
-                  className="w-full p-3 cursor-pointer flex justify-center items-center bg-black text-white hover:bg-gray-800"
+                  className="w-full p-3 cursor-pointer transition-all flex justify-center items-center border border-black bg-white text-black hover:bg-gray-900 hover:text-white"
                 >
                   View on unsplash <FaUnsplash className="mx-2 text-xl" />
                 </a>
               </div>
+              <button
+                className="w-full py-3 mt-5 z-10 rounded-sm transition-all bg-black text-white  flex justify-center items-center hover:bg-gray-800"
+                onClick={handleDownloadImage}
+              >
+                Download Image
+                <FaDownload size={20} className="mx-2" />
+              </button>
             </div>
           </div>
-
-          {isShowOnlyImage && (
-            <div className="absolute top-0 left-0 h-screen w-full flex justify-center items-center bg-gray-100">
-              <div className="h-screen lg:w-3/5 lg:ml-5 flex justify-center items-center relative overflow-hidden">
-                <Image
-                  src={photoDetails ? photoDetails?.urls?.regular : ""}
-                  className="z-0 object-contain transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
-                  alt={
-                    photoDetails
-                      ? photoDetails?.alt_description
-                      : "some random photo"
-                  }
-                  layout="fill"
-                />
-              </div>
-              <div className="z-50 -top-[310px] left-[80px] relative">
-                <IoCloseSharp
-                  className="cursor-pointer"
-                  size={50}
-                  onClick={closeShowingImage}
-                />
-              </div>
-            </div>
-          )}
         </div>
       )}
     </>

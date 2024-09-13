@@ -35,9 +35,9 @@ const HomePage: React.FC = () => {
                   <Image
                     src={item.urls.small}
                     alt={item.alt_description || "gallery"}
-                    // width={400}
-                    // height={400}
-                    layout="fill" // Use 'fill' to cover the parent container
+                    // width={800}
+                    // height={800}
+                    layout="fill" // 'fill' to cover the parent container
                     className="object-cover transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
                   />
                 </div>

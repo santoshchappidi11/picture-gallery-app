@@ -12,8 +12,12 @@ const Navbar: React.FC = () => {
   // console.log(searchQuery, "query here");
 
   const handleSearch = () => {
-    fetchPhotos(searchQuery);
-    setSearchQuery("");
+    if (searchQuery) {
+      fetchPhotos(searchQuery);
+      setSearchQuery("");
+    } else {
+      alert("please enter something!");
+    }
   };
 
   return (
