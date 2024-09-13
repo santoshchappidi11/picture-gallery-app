@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaLocationDot, FaUnsplash } from "react-icons/fa6";
+import { IoCloseSharp } from "react-icons/io5";
 import { PiDownloadSimple } from "react-icons/pi";
 import { TbEyeSearch } from "react-icons/tb";
 import { TiHeart } from "react-icons/ti";
@@ -44,6 +45,7 @@ const SinglePhotoDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [photoDetails, setPhotoDetails] = useState<Photo>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isShowOnlyImage, setIsShowOnlyImage] = useState<boolean>(false);
 
   console.log(photoDetails, "photo single");
 
@@ -67,6 +69,14 @@ const SinglePhotoDetails = () => {
     }
   }, [id]);
 
+  const handleShowImage = () => {
+    setIsShowOnlyImage(true);
+  };
+
+  const closeShowingImage = () => {
+    setIsShowOnlyImage(false);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -74,131 +84,160 @@ const SinglePhotoDetails = () => {
           <p className="font-semibold">Loading...</p>
         </div>
       ) : (
-        <div className="h-auto w-full lg:flex lg:justify-between lg:items-start">
-          <div className="h-screen lg:w-3/5 lg:ml-5 flex justify-center items-center relative overflow-hidden">
-            <Image
-              src={photoDetails ? photoDetails?.urls?.regular : ""}
-              // width={1000}
-              // height={1000}
-              alt={
-                photoDetails
-                  ? photoDetails?.alt_description
-                  : "some random photo"
-              }
-              layout="fill"
-              className="object-contain transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
-            />
-          </div>
+        <div className="h-auto w-full border border-black relative">
+          <div className="h-auto w-full lg:flex lg:justify-between lg:items-start border border-black">
+            <div className="h-screen lg:w-3/5 lg:ml-5 flex justify-center items-center relative overflow-hidden">
+              <Image
+                onClick={handleShowImage}
+                src={photoDetails ? photoDetails?.urls?.regular : ""}
+                // width={1000}
+                // height={1000}
+                alt={
+                  photoDetails
+                    ? photoDetails?.alt_description
+                    : "some random photo"
+                }
+                layout="fill"
+                className="object-contain transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
+              />
+            </div>
 
-          <div className="my-5 mx-5 lg:w-2/6">
-            <div className="border-b border-b-gray-300  flex flex-col items-center justify-center">
-              {" "}
-              <div className="flex justify-start items-center">
-                <Image
-                  src={
-                    photoDetails ? photoDetails?.user?.profile_image?.large : ""
-                  }
-                  alt={photoDetails ? photoDetails?.alt_description : ""}
-                  width={50}
-                  height={50}
-                  className="rounded-3xl"
-                />
-                <h2 className="font-semibold mx-2">
-                  <p className="font-normal text-sm">
-                    @{photoDetails?.user?.username}
-                  </p>
-                  {photoDetails?.user?.name}
-                </h2>
-              </div>
-              <div className="mt-2 flex justify-center items-center flex-col">
+            <div className="my-5 mx-5 lg:w-2/6">
+              <div className="border-b border-b-gray-300  flex flex-col items-center justify-center">
                 {" "}
-                <p className="text-center">{photoDetails?.alt_description}</p>
-                <p>
-                  By{" "}
-                  <a
-                    className="font-medium"
-                    href={`https://unsplash.com/@${photoDetails?.user.username}`}
-                  >
-                    @{photoDetails?.user.name}
-                  </a>
-                </p>
-                <p className="flex justify-start items-center my-2">
-                  <FaLocationDot className="mr-1" />{" "}
-                  {photoDetails?.user?.location
-                    ? photoDetails?.user?.location
-                    : "Not available"}
-                </p>
+                <div className="flex justify-start items-center">
+                  <Image
+                    src={
+                      photoDetails
+                        ? photoDetails?.user?.profile_image?.large
+                        : ""
+                    }
+                    alt={photoDetails ? photoDetails?.alt_description : ""}
+                    width={50}
+                    height={50}
+                    className="rounded-3xl"
+                  />
+                  <h2 className="font-semibold mx-2">
+                    <p className="font-normal text-sm">
+                      @{photoDetails?.user?.username}
+                    </p>
+                    {photoDetails?.user?.name}
+                  </h2>
+                </div>
+                <div className="mt-2 flex justify-center items-center flex-col">
+                  {" "}
+                  <p className="text-center">{photoDetails?.alt_description}</p>
+                  <p>
+                    By{" "}
+                    <a
+                      className="font-medium"
+                      href={`https://unsplash.com/@${photoDetails?.user.username}`}
+                    >
+                      @{photoDetails?.user.name}
+                    </a>
+                  </p>
+                  <p className="flex justify-start items-center my-2">
+                    <FaLocationDot className="mr-1" />{" "}
+                    {photoDetails?.user?.location
+                      ? photoDetails?.user?.location
+                      : "Not available"}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="w-full h-auto mt-5 flex justify-center items-center flex-col">
-              <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
-                Stats
-              </h2>
-              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
-                <p>Views: </p>
-                <span className="flex">
-                  {photoDetails?.views?.toLocaleString()}
-                  {"  "} <TbEyeSearch className="text-2xl mx-1" />
-                </span>{" "}
-              </div>
-              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
-                <p>Downloads:</p>
-                <span className="flex">
-                  {photoDetails?.downloads.toLocaleString()}{" "}
-                  <PiDownloadSimple className="text-2xl mx-1" />
-                </span>{" "}
-              </div>
-              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
-                <p>Likes:</p>
-                <span className="flex">
-                  {photoDetails?.likes.toLocaleString()}{" "}
-                  <TiHeart className="text-2xl mx-1" />
-                </span>{" "}
-              </div>
-            </div>
-
-            <div className="w-full mt-5 flex justify-center items-center flex-col">
-              <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
-                Additional Information
-              </h2>
-              <div className="sm w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
-                <p className="">Taken at:</p>
-                <span>
-                  {photoDetails?.taken_at
-                    ? photoDetails?.taken_at
-                    : "Not available"}
-                </span>
-              </div>
-              <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
-                <p>Camera:</p>
-                <span>
-                  {photoDetails?.camera
-                    ? photoDetails?.camera
-                    : "Not available"}
-                </span>
-              </div>
-              <div className="w-auto mt-10 mb-10 flex justify-center items-center flex-col">
-                <h2 className="px-2 bg-gray-100 text-gray-600 rounded-sm uppercase font-medium">
-                  Tags:
+              <div className="w-full h-auto mt-5 flex justify-center items-center flex-col">
+                <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
+                  Stats
                 </h2>
-                <p className=" w-auto text-center">
-                  {photoDetails?.tags
-                    ? photoDetails?.tags.map((tag) => tag?.title).join(", ")
-                    : "Not available"}
-                </p>
+                <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
+                  <p>Views: </p>
+                  <span className="flex">
+                    {photoDetails?.views?.toLocaleString()}
+                    {"  "} <TbEyeSearch className="text-2xl mx-1" />
+                  </span>{" "}
+                </div>
+                <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
+                  <p>Downloads:</p>
+                  <span className="flex">
+                    {photoDetails?.downloads.toLocaleString()}{" "}
+                    <PiDownloadSimple className="text-2xl mx-1" />
+                  </span>{" "}
+                </div>
+                <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
+                  <p>Likes:</p>
+                  <span className="flex">
+                    {photoDetails?.likes.toLocaleString()}{" "}
+                    <TiHeart className="text-2xl mx-1" />
+                  </span>{" "}
+                </div>
               </div>
-            </div>
 
-            <div className="h-auto text-center border border-gray-400 rounded-md">
-              <a
-                href={photoDetails?.links?.html}
-                target="blank"
-                className="w-full p-3 cursor-pointer flex justify-center items-center bg-black text-white hover:bg-gray-800"
-              >
-                View on unsplash <FaUnsplash className="mx-2 text-xl" />
-              </a>
+              <div className="w-full mt-5 flex justify-center items-center flex-col">
+                <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
+                  Additional Information
+                </h2>
+                <div className="sm w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
+                  <p className="">Taken at:</p>
+                  <span>
+                    {photoDetails?.taken_at
+                      ? photoDetails?.taken_at
+                      : "Not available"}
+                  </span>
+                </div>
+                <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
+                  <p>Camera:</p>
+                  <span>
+                    {photoDetails?.camera
+                      ? photoDetails?.camera
+                      : "Not available"}
+                  </span>
+                </div>
+                <div className="w-auto mt-10 mb-10 flex justify-center items-center flex-col">
+                  <h2 className="px-2 bg-gray-100 text-gray-600 rounded-sm uppercase font-medium">
+                    Tags:
+                  </h2>
+                  <p className=" w-auto text-center">
+                    {photoDetails?.tags
+                      ? photoDetails?.tags.map((tag) => tag?.title).join(", ")
+                      : "Not available"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="h-auto text-center border border-gray-400 rounded-md">
+                <a
+                  href={photoDetails?.links?.html}
+                  target="blank"
+                  className="w-full p-3 cursor-pointer flex justify-center items-center bg-black text-white hover:bg-gray-800"
+                >
+                  View on unsplash <FaUnsplash className="mx-2 text-xl" />
+                </a>
+              </div>
             </div>
           </div>
+
+          {isShowOnlyImage && (
+            <div className="absolute top-0 left-0 h-screen w-full flex justify-center items-center bg-gray-100">
+              <div className="h-screen lg:w-3/5 lg:ml-5 flex justify-center items-center relative overflow-hidden">
+                <Image
+                  src={photoDetails ? photoDetails?.urls?.regular : ""}
+                  className="z-0 object-contain transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
+                  alt={
+                    photoDetails
+                      ? photoDetails?.alt_description
+                      : "some random photo"
+                  }
+                  layout="fill"
+                />
+                <div className="z-50 -top-[330px] left-[420px] relative">
+                  <IoCloseSharp
+                    className="cursor-pointer"
+                    size={50}
+                    onClick={closeShowingImage}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>
