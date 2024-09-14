@@ -22,9 +22,16 @@ type Photo = {
 };
 
 type PhotoContextType = {
+  serverError: boolean;
+  initialLoading: boolean;
   photos: Photo[];
-  setPhotos: React.Dispatch<React.SetStateAction<Photo[]>>;
   fetchPhotos: (query: string) => void;
+  currentPagePhotos: Photo[];
+  nextPage: () => void;
+  prevPage: () => void;
+  currentPage: number;
+  totalPages: number; // expose total pages
+  goToPage: (pageNumber: number) => void; // expose page navigation function
 };
 
 const PhotoContext = createContext<PhotoContextType | undefined>(undefined);
@@ -33,18 +40,29 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
+  const [serverError, setServerError] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const photosPerPage = 12;
+
+  // Calculate total pages based on total photos and photos per page
+  const totalPages = Math.ceil(photos.length / photosPerPage);
 
   const fetchPhotos = async (query: string) => {
-    // console.log(query, "context query");
-
     try {
       const response = await api.get("/search/photos", {
-        params: { query, per_page: 12 },
+        params: { query, per_page: 30 },
       });
       const data = response.data;
-      setPhotos(data.results);
-      console.log(data, "query");
+      if (data) {
+        setPhotos(data.results);
+        setInitialLoading(false);
+      } else {
+        setInitialLoading(true);
+      }
     } catch (error) {
+      setInitialLoading(false);
+      setServerError(true);
       console.error("Error fetching photos", error);
     }
   };
@@ -53,20 +71,62 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchInitialPhotos = async () => {
       try {
         const response = await api.get("/photos/random", {
-          params: { count: 12 },
+          params: { count: 30 },
         });
         const data = response.data;
-        setPhotos(data);
-        console.log(data, "initial");
+        if (data) {
+          setPhotos(data);
+          setInitialLoading(false);
+        } else {
+          setInitialLoading(true);
+        }
       } catch (error) {
+        setInitialLoading(false);
+        setServerError(true);
         console.error("Error fetching photos", error);
       }
     };
     fetchInitialPhotos();
   }, []);
 
+  const currentPagePhotos = photos.slice(
+    (currentPage - 1) * photosPerPage,
+    currentPage * photosPerPage
+  );
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const goToPage = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
   return (
-    <PhotoContext.Provider value={{ photos, setPhotos, fetchPhotos }}>
+    <PhotoContext.Provider
+      value={{
+        photos,
+        currentPagePhotos,
+        currentPage,
+        totalPages, // expose total pages
+        fetchPhotos,
+        initialLoading,
+        serverError,
+        nextPage,
+        prevPage,
+        goToPage, // expose goToPage function
+      }}
+    >
       {children}
     </PhotoContext.Provider>
   );
