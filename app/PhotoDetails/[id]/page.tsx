@@ -128,7 +128,7 @@ const SinglePhotoDetails = () => {
 
   return (
     <>
-      <div className="h-auto w-full relative flex justify-center items-center">
+      <div className="h-auto w-full relative flex justify-center items-center ">
         <div className="h-auto w-full lg:flex lg:justify-between lg:items-center">
           <div className="h-screen lg:w-3/5 lg:ml-5 image-container relative overflow-hidden">
             {!isLoading ? (
@@ -154,7 +154,7 @@ const SinglePhotoDetails = () => {
             )}
           </div>
 
-          <div className="my-5 mx-5 lg:w-2/6 lg:border-l lg:border-l-gray-200 pl-5">
+          <div className="my-5 mx-5 lg:w-2/6 lg:border-l lg:border-l-gray-200 pl-5 ">
             <div className="border-b border-b-gray-200 py-4 flex flex-col items-center justify-center">
               {" "}
               <div className="flex justify-start items-center">
