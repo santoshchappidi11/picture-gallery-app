@@ -47,7 +47,7 @@ const SinglePhotoDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [photoDetails, setPhotoDetails] = useState<Photo>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const imageRef = useRef();
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   console.log(photoDetails, "photo single");
 
