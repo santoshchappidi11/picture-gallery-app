@@ -95,9 +95,11 @@ const HomePage: React.FC = () => {
                     )}
 
                     {initialLoading ||
-                    !item.user.username ||
-                    !item.user.name ? (
-                      <Skeleton width={80} height={12} />
+                    !item.user.name ||
+                    !item.user.username ? (
+                      <>
+                        <Skeleton width={80} height={12} count={2} />
+                      </>
                     ) : (
                       <div>
                         <p className="text-xs">@{item.user.username}</p>
@@ -106,8 +108,8 @@ const HomePage: React.FC = () => {
                     )}
                   </div>
 
-                  {initialLoading || !item.alt_description ? (
-                    <Skeleton count={2} />
+                  {initialLoading ? (
+                    <Skeleton count={2} width="100%" />
                   ) : (
                     <p className="mt-3 mb-4 w-full h-auto text-center text-sm px-5">
                       {item.alt_description}
@@ -127,7 +129,7 @@ const HomePage: React.FC = () => {
                   disabled={initialLoading || currentPage === 1}
                 >
                   <FaAnglesLeft className="mr-1" />
-                  Previous
+                  Prev
                 </button>
 
                 {/* Page Numbers */}

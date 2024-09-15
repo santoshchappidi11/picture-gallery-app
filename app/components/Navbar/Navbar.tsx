@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { usePhotoContext } from "@/app/Context/PhotoContext";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { fetchPhotos, serverError } = usePhotoContext();
+  const { fetchPhotos, serverError, initialLoading } = usePhotoContext();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
       fetchPhotos(searchQuery);
       setSearchQuery("");
     } else {
-      // toast.error("Please enter something!");
+      toast.error("Please enter something!");
     }
   };
 
@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      {!serverError && (
+      {!serverError && !initialLoading && (
         <div className="h-20 w-full flex justify-center items-center sticky top-0 bg-transparent backdrop-blur-md z-10">
           <div className="h-auto lg:w-96 sm:w-80 border border-black flex justify-between items-center rounded-md bg-gray-100 focus:bg-white">
             <input

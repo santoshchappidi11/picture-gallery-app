@@ -9,7 +9,7 @@ import { PiDownloadSimple } from "react-icons/pi";
 import { TbEyeSearch } from "react-icons/tb";
 import { TiHeart } from "react-icons/ti";
 import Skeleton from "react-loading-skeleton";
-// import { IoCloseSharp } from "react-icons/io5";
+import "react-loading-skeleton/dist/skeleton.css";
 
 type tag = {
   title: string;
@@ -150,7 +150,6 @@ const SinglePhotoDetails = () => {
                 width="100%"
                 baseColor="#e0e0e0"
                 highlightColor="#f5f5f5"
-                // className="2xl:w-10/12 sm:w-full"
               />
             )}
           </div>
@@ -318,8 +317,8 @@ const SinglePhotoDetails = () => {
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton width={60} height={20} /> {/* Camera */}
-                    <Skeleton width={120} height={20} /> {/* Camera Value */}
+                    <Skeleton width={60} height={20} />
+                    <Skeleton width={120} height={20} />
                   </>
                 ) : (
                   <>

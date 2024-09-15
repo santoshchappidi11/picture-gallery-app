@@ -30,8 +30,8 @@ type PhotoContextType = {
   nextPage: () => void;
   prevPage: () => void;
   currentPage: number;
-  totalPages: number; // expose total pages
-  goToPage: (pageNumber: number) => void; // expose page navigation function
+  totalPages: number;
+  goToPage: (pageNumber: number) => void;
 };
 
 const PhotoContext = createContext<PhotoContextType | undefined>(undefined);
@@ -48,7 +48,9 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
   // Calculate total pages based on total photos and photos per page
   const totalPages = Math.ceil(photos.length / photosPerPage);
 
+  // Fetch photos on search
   const fetchPhotos = async (query: string) => {
+    setInitialLoading(true); // Ensure loading is true at the start of the fetch
     try {
       const response = await api.get("/search/photos", {
         params: { query, per_page: 30 },
@@ -58,37 +60,43 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
         setPhotos(data.results);
         setInitialLoading(false);
       } else {
-        setInitialLoading(true);
+        setServerError(true);
+        setInitialLoading(false);
       }
     } catch (error) {
-      setInitialLoading(false);
       setServerError(true);
+      setInitialLoading(false);
+      console.error("Error fetching photos", error);
+    }
+  };
+
+  // Fetch random photos on initial load of the page
+  const fetchInitialPhotos = async () => {
+    setInitialLoading(true); // Ensure loading is true at the start of the fetch
+    try {
+      const response = await api.get("/photos/random", {
+        params: { count: 30 },
+      });
+      const data = response.data;
+      if (data) {
+        setPhotos(data);
+        setInitialLoading(false);
+      } else {
+        setServerError(true);
+        setInitialLoading(false);
+      }
+    } catch (error) {
+      setServerError(true);
+      setInitialLoading(false);
       console.error("Error fetching photos", error);
     }
   };
 
   useEffect(() => {
-    const fetchInitialPhotos = async () => {
-      try {
-        const response = await api.get("/photos/random", {
-          params: { count: 30 },
-        });
-        const data = response.data;
-        if (data) {
-          setPhotos(data);
-          setInitialLoading(false);
-        } else {
-          setInitialLoading(true);
-        }
-      } catch (error) {
-        setInitialLoading(false);
-        setServerError(true);
-        console.error("Error fetching photos", error);
-      }
-    };
     fetchInitialPhotos();
   }, []);
 
+  // Get current page photos
   const currentPagePhotos = photos.slice(
     (currentPage - 1) * photosPerPage,
     currentPage * photosPerPage
@@ -118,13 +126,13 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
         photos,
         currentPagePhotos,
         currentPage,
-        totalPages, // expose total pages
+        totalPages,
         fetchPhotos,
         initialLoading,
         serverError,
         nextPage,
         prevPage,
-        goToPage, // expose goToPage function
+        goToPage,
       }}
     >
       {children}
