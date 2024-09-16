@@ -68,32 +68,35 @@ const Navbar: React.FC = () => {
     <>
       {!serverError && !initialLoading && (
         <div className="h-20 w-full flex justify-center items-center sticky top-0 bg-transparent backdrop-blur-md z-10 ">
-          <div className="h-auto lg:w-96 sm:w-80 border border-black flex justify-between items-center rounded-md bg-gray-100 dark:bg-gray-800">
-            <input
-              type="text"
-              placeholder="search category..."
-              className="w-full h-10 outline-none placeholder:text-sm bg-gray-100 dark:bg-gray-800 dark:text-white focus:bg-white dark:focus:bg-gray-700 rounded-md px-2"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
+          <div className="flex justify-center items-center mx-5 lg:mx-0">
+            {" "}
+            <div className="h-auto lg:w-96 sm:w-80 border border-black flex justify-between items-center rounded-md bg-gray-100 dark:bg-gray-800">
+              <input
+                type="text"
+                placeholder="search category..."
+                className="w-full h-10 outline-none placeholder:text-sm bg-gray-100 dark:bg-gray-800 dark:text-white focus:bg-white dark:focus:bg-gray-700 rounded-md px-2"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button
+                className="flex justify-between items-center w-auto h-10 pl-2 bg-none bg-black text-white hover:bg-gray-800 transition-all rounded-r-md outline-none"
+                onClick={handleSearch}
+              >
+                <FaArrowRightLong className="ml-2 mr-4" size={20} />
+              </button>
+            </div>
             <button
-              className="flex justify-between items-center w-auto h-10 pl-2 bg-none bg-black text-white hover:bg-gray-800 transition-all rounded-r-md outline-none"
-              onClick={handleSearch}
+              onClick={toggleTheme}
+              className="ml-4 p-2 bg-gray-200 dark:bg-gray-700 rounded-md"
             >
-              <FaArrowRightLong className="ml-2 mr-4" size={20} />
+              {theme === "light" ? (
+                <BsMoon size={20} />
+              ) : (
+                <BsSun color="yellow" size={20} />
+              )}
             </button>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="ml-4 p-2 bg-gray-200 dark:bg-gray-700 rounded-md"
-          >
-            {theme === "light" ? (
-              <BsMoon size={20} />
-            ) : (
-              <BsSun color="yellow" size={20} />
-            )}
-          </button>
         </div>
       )}
     </>
