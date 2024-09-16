@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import api from "@/app/ApiConfig";
 
 type Photo = {
@@ -22,6 +29,8 @@ type Photo = {
 };
 
 type PhotoContextType = {
+  isDarkMode: string;
+  setIsDarkMode: Dispatch<SetStateAction<string>>;
   serverError: boolean;
   initialLoading: boolean;
   photos: Photo[];
@@ -43,6 +52,7 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [serverError, setServerError] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isDarkMode, setIsDarkMode] = useState<string>("light");
   const photosPerPage = 12;
 
   // Calculate total pages based on total photos and photos per page
@@ -123,6 +133,8 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <PhotoContext.Provider
       value={{
+        isDarkMode,
+        setIsDarkMode,
         photos,
         currentPagePhotos,
         currentPage,

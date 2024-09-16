@@ -1,5 +1,0 @@
-.grid-item {
-  display: grid;
-  grid-template-rows: 1fr; /* Set dynamic row height */
-  gap: 10px; /* Add gap between grid items */
-}

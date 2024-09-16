@@ -1,6 +1,7 @@
 "use client";
 
 import api from "@/app/ApiConfig";
+import { usePhotoContext } from "@/app/Context/PhotoContext";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -48,6 +49,10 @@ const SinglePhotoDetails = () => {
   const [photoDetails, setPhotoDetails] = useState<Photo>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const { isDarkMode } = usePhotoContext();
+
+  const skeletonBaseColor = isDarkMode == "dark" ? "#333333" : "#e0e0e0"; // Dark mode base color
+  const skeletonHighlightColor = isDarkMode == "dark" ? "#444444" : "#f5f5f5"; // Dark mode highlight color
 
   console.log(photoDetails, "photo single");
 
@@ -128,7 +133,7 @@ const SinglePhotoDetails = () => {
 
   return (
     <>
-      <div className="h-auto w-full relative flex justify-center items-center ">
+      <div className="h-auto w-full relative flex justify-center items-center dark:bg-gray-950 dark:text-white">
         <div className="h-auto w-full lg:flex lg:justify-between lg:items-center">
           <div className="h-screen lg:w-3/5 lg:ml-5 image-container relative overflow-hidden">
             {!isLoading ? (
@@ -148,20 +153,26 @@ const SinglePhotoDetails = () => {
               <Skeleton
                 height="100%"
                 width="100%"
-                baseColor="#e0e0e0"
-                highlightColor="#f5f5f5"
+                baseColor={skeletonBaseColor}
+                highlightColor={skeletonHighlightColor}
               />
             )}
           </div>
 
-          <div className="my-5 mx-5 lg:w-2/6 lg:border-l lg:border-l-gray-200 pl-5 ">
-            <div className="border-b border-b-gray-200 py-4 flex flex-col items-center justify-center">
+          <div className="my-5 mx-5 lg:w-2/6 lg:border-l lg:border-l-gray-200 pl-5 dark:border-l-gray-800 ">
+            <div className="border-b border-b-gray-200 py-4 flex flex-col items-center justify-center dark:border-b-gray-800">
               {" "}
               <div className="flex justify-start items-center">
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton circle width={50} height={50} />{" "}
+                    <Skeleton
+                      circle
+                      width={50}
+                      height={50}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />{" "}
                   </>
                 ) : (
                   <Image
@@ -180,11 +191,21 @@ const SinglePhotoDetails = () => {
                   {isLoading ? (
                     <>
                       {" "}
-                      <Skeleton width={100} height={15} />
-                      <Skeleton width={150} height={15} />
+                      <Skeleton
+                        width={100}
+                        height={15}
+                        baseColor={skeletonBaseColor}
+                        highlightColor={skeletonHighlightColor}
+                      />
+                      <Skeleton
+                        width={150}
+                        height={15}
+                        baseColor={skeletonBaseColor}
+                        highlightColor={skeletonHighlightColor}
+                      />
                     </>
                   ) : (
-                    <p className="font-normal text-sm">
+                    <p className="font-normal text-sm dark:text-gray-400">
                       @{photoDetails?.user?.username}
                     </p>
                   )}
@@ -196,14 +217,29 @@ const SinglePhotoDetails = () => {
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton width={200} height={20} />
-                    <Skeleton width={250} height={20} />{" "}
-                    <Skeleton width={100} height={20} />{" "}
+                    <Skeleton
+                      width={200}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
+                    <Skeleton
+                      width={250}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />{" "}
+                    <Skeleton
+                      width={100}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />{" "}
                   </>
                 ) : (
                   <>
                     <p className="flex justify-start items-center my-2">
-                      <FaLocationDot className="mr-1" />{" "}
+                      <FaLocationDot className="mr-1 text-orange-500" />{" "}
                       {photoDetails?.user?.location
                         ? photoDetails?.user?.location
                         : "Not available"}
@@ -214,13 +250,13 @@ const SinglePhotoDetails = () => {
                     <p>
                       By{" "}
                       <a
-                        className="font-medium"
+                        className="font-medium dark:text-gray-400"
                         href={`https://unsplash.com/@${photoDetails?.user.username}`}
                       >
                         @{photoDetails?.user.name}
                       </a>
                     </p>
-                    <p className="text-sm mt-2">
+                    <p className="text-sm mt-2 dark:text-gray-300">
                       {photoDetails?.created_at &&
                         formatDate(photoDetails?.created_at)}
                     </p>
@@ -229,14 +265,24 @@ const SinglePhotoDetails = () => {
               </div>
             </div>
             <div className="w-full h-auto mt-5 flex justify-center items-center flex-col">
-              <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
+              <h2 className="uppercase font-medium px-2  mb-2 bg-gray-100 text-gray-600 rounded-sm dark:bg-gray-800 dark:text-gray-400">
                 Stats
               </h2>
               <div className="w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
                 {isLoading ? (
                   <>
-                    <Skeleton width={50} height={20} />
-                    <Skeleton width={50} height={20} />
+                    <Skeleton
+                      width={50}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
+                    <Skeleton
+                      width={50}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
                   </>
                 ) : (
                   <>
@@ -253,8 +299,18 @@ const SinglePhotoDetails = () => {
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton width={80} height={20} />
-                    <Skeleton width={50} height={20} />
+                    <Skeleton
+                      width={80}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
+                    <Skeleton
+                      width={50}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
                   </>
                 ) : (
                   <>
@@ -274,8 +330,18 @@ const SinglePhotoDetails = () => {
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton width={50} height={20} />
-                    <Skeleton width={50} height={20} />
+                    <Skeleton
+                      width={50}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
+                    <Skeleton
+                      width={50}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
                   </>
                 ) : (
                   <>
@@ -291,15 +357,25 @@ const SinglePhotoDetails = () => {
             </div>
 
             <div className="w-full mt-5 flex justify-center items-center flex-col">
-              <h2 className="uppercase font-medium px-2 bg-gray-100 text-gray-600 rounded-sm">
+              <h2 className="uppercase font-medium px-2  mb-2 bg-gray-100 text-gray-600 rounded-sm dark:bg-gray-800 dark:text-gray-400">
                 Additional Information
               </h2>
               <div className="sm w-3/5 2xl:w-3/5 xl:w-3/5 lg:w-3/5 flex justify-between items-center my-2">
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton width={80} height={20} />
-                    <Skeleton width={100} height={20} />
+                    <Skeleton
+                      width={80}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
+                    <Skeleton
+                      width={100}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
                   </>
                 ) : (
                   <>
@@ -317,8 +393,18 @@ const SinglePhotoDetails = () => {
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton width={60} height={20} />
-                    <Skeleton width={120} height={20} />
+                    <Skeleton
+                      width={60}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
+                    <Skeleton
+                      width={120}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
                   </>
                 ) : (
                   <>
@@ -333,18 +419,23 @@ const SinglePhotoDetails = () => {
                 )}
               </div>
               <div className="w-auto mt-10 mb-10 flex justify-center items-center flex-col">
-                <h2 className="px-2 bg-gray-100 text-gray-600 rounded-sm uppercase font-medium">
-                  Tags:
+                <h2 className="px-2 mb-2 bg-gray-100 text-gray-600 rounded-sm uppercase font-medium dark:bg-gray-800 dark:text-gray-400">
+                  Tags
                 </h2>
                 {isLoading ? (
                   <>
                     {" "}
-                    <Skeleton width={200} height={20} />
+                    <Skeleton
+                      width={200}
+                      height={20}
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
                   </>
                 ) : (
                   <>
                     {" "}
-                    <p className=" w-auto text-center">
+                    <p className=" w-auto text-center dark:text-gray-300">
                       {photoDetails?.tags
                         ? photoDetails?.tags.map((tag) => tag?.title).join(", ")
                         : "Not available"}
@@ -356,16 +447,21 @@ const SinglePhotoDetails = () => {
 
             {isLoading ? (
               <>
-                <Skeleton height={50} width="100%" />{" "}
+                <Skeleton
+                  height={50}
+                  width="100%"
+                  baseColor={skeletonBaseColor}
+                  highlightColor={skeletonHighlightColor}
+                />{" "}
               </>
             ) : (
               <>
                 {" "}
-                <div className="h-auto text-center border border-gray-400 rounded-md">
+                <div className="h-auto text-center rounded-md">
                   <a
                     href={photoDetails?.links?.html}
                     target="blank"
-                    className="w-full p-3 cursor-pointer transition-all flex justify-center items-center border border-black bg-white text-black hover:bg-gray-900 hover:text-white"
+                    className="w-full p-3 cursor-pointer transition-all flex justify-center items-center border border-black rounded-sm bg-white text-black hover:bg-gray-900 hover:text-white dark:bg-gray-900 dark:hover:bg-gray-800 dark:border-none dark:text-white"
                   >
                     View on unsplash <FaUnsplash className="mx-2 text-xl" />
                   </a>
@@ -380,13 +476,15 @@ const SinglePhotoDetails = () => {
                   height={50}
                   width="100%"
                   className="mt-5 rounded-sm"
+                  baseColor={skeletonBaseColor}
+                  highlightColor={skeletonHighlightColor}
                 />{" "}
               </>
             ) : (
               <>
                 {" "}
                 <button
-                  className="w-full py-3 mt-5 z-10 rounded-sm transition-all bg-black text-white  flex justify-center items-center hover:bg-gray-800"
+                  className="w-full py-3 mt-5 z-10 rounded-sm transition-all bg-black text-white  flex justify-center items-center hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-200 dark:hover:text-black"
                   onClick={handleDownloadImage}
                 >
                   Download Image

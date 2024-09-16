@@ -18,6 +18,7 @@ const HomePage: React.FC = () => {
     currentPage,
     totalPages,
     goToPage,
+    isDarkMode,
   } = usePhotoContext();
 
   const renderPageNumbers = () => {
@@ -29,8 +30,8 @@ const HomePage: React.FC = () => {
           onClick={() => goToPage(i)}
           className={`px-3 py-1 rounded ${
             currentPage === i
-              ? "bg-gray-900 text-white"
-              : "bg-gray-200 text-black hover:bg-white"
+              ? "bg-gray-900 text-white dark:bg-gray-200 dark:text-black"
+              : "bg-gray-200 text-black hover:bg-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
           }`}
         >
           {i}
@@ -40,32 +41,35 @@ const HomePage: React.FC = () => {
     return pageNumbers;
   };
 
+  const skeletonBaseColor = isDarkMode == "dark" ? "#333333" : "#e0e0e0"; // Dark mode base color
+  const skeletonHighlightColor = isDarkMode == "dark" ? "#444444" : "#f5f5f5"; // Dark mode highlight color
+
   return (
     <>
       {serverError ? (
-        <div className="h-screen w-full flex justify-center items-center font-medium">
-          <p className="text-gray-700">
+        <div className="h-screen w-full flex justify-center items-center font-medium dark:bg-gray-950 dark:text-gray-100">
+          <p className="text-gray-700 dark:text-gray-300">
             Can&apos;t get your photos right now{" "}
-            <span className="text-red-500">!!!</span>
+            <span className="text-red-500 dark:text-red-400">!!!</span>
           </p>
         </div>
       ) : (
-        <div className="h-auto w-full my-10 px-5">
+        <div className="h-auto w-full my-10 px-5  dark:bg-black ">
           <div className="h-auto w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 place-items-center">
             {currentPagePhotos &&
               currentPagePhotos.map((item) => (
                 <Link
                   href={`/PhotoDetails/${item.id}`}
                   key={item.id}
-                  className="h-full w-full border border-gray-200"
+                  className="h-full w-full border dark:border-gray-800 dark:bg-black rounded-md"
                 >
                   <div className="relative h-96 w-full overflow-hidden rounded-sm">
                     {initialLoading || !item.urls.regular ? (
                       <Skeleton
                         height="100%"
                         width="100%"
-                        baseColor="#e0e0e0"
-                        highlightColor="#f5f5f5"
+                        baseColor={skeletonBaseColor}
+                        highlightColor={skeletonHighlightColor}
                       />
                     ) : (
                       <Image
@@ -83,6 +87,8 @@ const HomePage: React.FC = () => {
                         width={35}
                         height={35}
                         className="mx-2"
+                        baseColor={skeletonBaseColor}
+                        highlightColor={skeletonHighlightColor}
                       />
                     ) : (
                       <Image
@@ -97,21 +103,34 @@ const HomePage: React.FC = () => {
                     {initialLoading ||
                     !item.user.name ||
                     !item.user.username ? (
-                      <>
-                        <Skeleton width={80} height={12} count={2} />
-                      </>
+                      <Skeleton
+                        width={80}
+                        height={12}
+                        count={2}
+                        baseColor={skeletonBaseColor}
+                        highlightColor={skeletonHighlightColor}
+                      />
                     ) : (
                       <div>
-                        <p className="text-xs">@{item.user.username}</p>
-                        <h2 className="font-semibold">{item.user.name}</h2>
+                        <p className="text-xs dark:text-gray-300">
+                          @{item.user.username}
+                        </p>
+                        <h2 className="font-semibold dark:text-white">
+                          {item.user.name}
+                        </h2>
                       </div>
                     )}
                   </div>
 
                   {initialLoading ? (
-                    <Skeleton count={2} width="100%" />
+                    <Skeleton
+                      count={2}
+                      width="100%"
+                      baseColor={skeletonBaseColor}
+                      highlightColor={skeletonHighlightColor}
+                    />
                   ) : (
-                    <p className="mt-3 mb-4 w-full h-auto text-center text-sm px-5">
+                    <p className="mt-3 mb-4 w-full h-auto text-center text-sm px-5 dark:text-gray-400">
                       {item.alt_description}
                     </p>
                   )}
@@ -125,7 +144,7 @@ const HomePage: React.FC = () => {
               <div className="w-full xl:w-1/4 sm:w-ful flex justify-between items-center mx-5">
                 <button
                   onClick={prevPage}
-                  className="bg-gray-200 text-black px-3 py-1 rounded-sm flex justify-center items-center hover:bg-white border"
+                  className="bg-gray-200 dark:bg-gray-800 text-black dark:text-white px-3 py-1 rounded-sm flex justify-center items-center hover:bg-white dark:hover:bg-gray-600 border dark:border-gray-600"
                   disabled={initialLoading || currentPage === 1}
                 >
                   <FaAnglesLeft className="mr-1" />
@@ -139,7 +158,7 @@ const HomePage: React.FC = () => {
 
                 <button
                   onClick={nextPage}
-                  className="bg-gray-200 text-black px-3 py-1 rounded-sm flex justify-center items-center hover:bg-white"
+                  className="bg-gray-200 dark:bg-gray-800 text-black dark:text-white px-3 py-1 rounded-sm flex justify-center items-center hover:bg-white dark:hover:bg-gray-600 border dark:border-gray-600"
                   disabled={initialLoading || currentPage === totalPages}
                 >
                   Next

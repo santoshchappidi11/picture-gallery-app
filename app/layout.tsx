@@ -23,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <PhotoProvider>
-        <body className={poppins.className}>{children}</body>
+        <body className={`${poppins.className} dark:bg-gray-950`}>
+          {children}
+        </body>
       </PhotoProvider>
     </html>
   );
